@@ -5,8 +5,9 @@ const path = require('path');
 const fs = require('fs');
 const { processVideo } = require('./process');
 
+
 const app = express();
-app.use(cors());
+app.use(cors()); // 
 
 const upload = multer({ dest: 'server/uploads/' });
 
@@ -18,5 +19,13 @@ app.post('/process', upload.single('video'), async (req, res) => {
   const gifs = await processVideo(videoPath, prompt);
   res.json({ gifs });
 });
+app.post('/api/process', upload.single('video'), async (req, res) => {
+  const { prompt } = req.body;
+  const videoPath = req.file.path;
 
-app.listen(5000, () => console.log('Server running on http://localhost:5000'));
+  const gifs = await processVideo(videoPath, prompt);
+  res.json({ gifs });
+});
+
+
+app.listen(5005, () => console.log('Server running on http://localhost:5005'));
